@@ -1,0 +1,16 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: ChenXiang
+ * Date: $date
+ * Time: $time
+ */
+
+namespace $DummyNamespace;
+
+
+class $DummyClass extends $DummyExtends
+{
+
+}
+?>

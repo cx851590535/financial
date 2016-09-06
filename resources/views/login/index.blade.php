@@ -2,7 +2,7 @@
 <html >
 <head>
     <meta charset="UTF-8">
-    <title>Login Form</title>
+    <title>登录</title>
 
     <link rel="stylesheet" href="/css/normalize.css">
 
@@ -63,11 +63,13 @@
             transition: box-shadow .5s ease;
         }
         input:focus { box-shadow: inset 0 -5px 45px rgba(100,100,100,0.4), 0 1px 1px rgba(255,255,255,0.2); }
-
+        input:required:invalid{color: #0e90d2;}
     </style>
 
 
-    <script src="js/prefixfree.min.js"></script>
+    <script src="/js/prefixfree.min.js"></script>
+    <script src="/js/jquery-3.1.0.min.js"></script>
+    <script src="/js/layer.js"></script>
 
 
 </head>
@@ -77,13 +79,23 @@
 <div class="login">
     <h1>Login</h1>
     <form method="post">
-        <input type="text" name="u" placeholder="用户名" required="required" />
-        <input type="password" name="p" placeholder="密码" required="required" />
-        <button type="submit" class="btn btn-primary btn-block btn-large">登录</button>
+        <input type="text" id="username" name="username" placeholder="用户名"  />
+        <input type="password" id="password" name="password" placeholder="密码" />
+        <input type="button" id="login" class="btn btn-primary btn-block btn-large" value="登录">
     </form>
 </div>
 
 
 
 </body>
+<script>
+    $("#login").click(function () {
+        var username = $("#username").val();
+        var password = $("#password").val();
+        if(!username||!password){
+            layer.msg('用户名或密码不能为空！',{time:2000});
+        }
+
+    });
+</script>
 </html>
