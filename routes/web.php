@@ -30,6 +30,6 @@ Route::group(['middleware'=>'login'],function (){
      * 需要权限认证
      * */
     Route::group(['middleware'=>'permission'],function (){
-        
+
     });
 });
