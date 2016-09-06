@@ -17,3 +17,12 @@
 Route::get('/', function () {
     return view('login.index');
 });
+
+Route::post('/login/login','LoginController@login');
+
+/*
+ * 需要登录
+ * */
+Route::group(['middleware'=>'login'],function (){
+    Route::get('/home/index','LoginController@index');
+});

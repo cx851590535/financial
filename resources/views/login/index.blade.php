@@ -77,7 +77,7 @@
 <body>
 
 <div class="login">
-    <h1>Login</h1>
+    <h1>登录</h1>
     <form method="post">
         <input type="text" id="username" name="username" placeholder="用户名"  />
         <input type="password" id="password" name="password" placeholder="密码" />
@@ -95,6 +95,19 @@
         if(!username||!password){
             layer.msg('用户名或密码不能为空！',{time:2000});
         }
+        $.ajax({
+            type:'post',
+            data:'username='+username+'&password='+password+'&_token={{csrf_token()}}',
+            url:'/login/login',
+            success:function (data) {
+
+                if(data.code!=200){
+                    layer.msg(data.msg,{time:2000});
+                }else{
+                    location.href='/home/index';
+                }
+            }
+        })
 
     });
 </script>
