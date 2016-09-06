@@ -24,5 +24,12 @@ Route::post('/login/login','LoginController@login');
  * 需要登录
  * */
 Route::group(['middleware'=>'login'],function (){
-    Route::get('/home/index','LoginController@index');
+    Route::get('/home/index','LoginController@index');//首页
+
+    /*
+     * 需要权限认证
+     * */
+    Route::group(['middleware'=>'permission'],function (){
+        
+    });
 });

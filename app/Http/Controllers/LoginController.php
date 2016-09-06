@@ -51,7 +51,7 @@ class LoginController extends Controller
      * */
     public function index(Request $request){
         $user = session('user');
-        dump($user);
+        dump($request->getrequestUri());
         return view('home.index');
     }
 }
