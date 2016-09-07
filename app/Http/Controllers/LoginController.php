@@ -37,7 +37,7 @@ class LoginController extends Controller
             if($v['fid'] == 0){
                 $permission[$v['id']] = $v;
             }else{
-                $permission[$v['fid']]['item'] = $v;
+                $permission[$v['fid']]['item'][] = $v;
             }
         }
         $user['permissions'] = $permission;
@@ -47,11 +47,25 @@ class LoginController extends Controller
     }
 
     /*
-     * 主页
+     * 登录页
      * */
     public function index(Request $request){
-        $user = session('user');
-        dump($request->getrequestUri());
+        if($request->session()->has('user')){
+           return redirect('/home/index');
+        }
+        return view('login.index');
+    }
+    /*
+     * 主页
+     * */
+    public function home(Request $request){
         return view('home.index');
+    }
+    /*
+     * 退出登录
+     * */
+    public function logout(Request $request){
+        $request->session()->flush();
+        return redirect('/');
     }
 }

@@ -1,38 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>detailAdmin简单清爽的响应式后台系统模板下载 - Home</title>
-    
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	
-    <!-- bootstrap -->
-    <link href="/css/bootstrap/bootstrap.css" rel="stylesheet" />
-    <link href="/css/bootstrap/bootstrap-responsive.css" rel="stylesheet" />
-    <link href="/css/bootstrap/bootstrap-overrides.css" type="text/css" rel="stylesheet" />
-
-    <!-- libraries -->
-    <link href="/css/lib/jquery-ui-1.10.2.custom.css" rel="stylesheet" type="text/css" />
-    <link href="/css/lib/font-awesome.css" type="text/css" rel="stylesheet" />
-
-    <!-- global styles -->
-    <link rel="stylesheet" type="text/css" href="/css/layout.css" />
-    <link rel="stylesheet" type="text/css" href="/css/elements.css" />
-    <link rel="stylesheet" type="text/css" href="/css/icons.css" />
-
-    <!-- this page specific styles -->
-    <link rel="stylesheet" href="/css/compiled/index.css" type="text/css" media="screen" />
-
-    <!-- open sans font -->
-    <link href='/css/font1.css' rel='stylesheet' type='text/css' />
-
-    <!-- lato font -->
-    <link href='/css/font2.css' rel='stylesheet' type='text/css' />
-
-    <!--[if lt IE 9]>
-      <script src="/js/html5.js"></script>
-    <![endif]-->
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
-<body>
 
     @include('layout.top')
 
@@ -41,15 +6,7 @@
 	<!-- main container -->
     <div class="content">
 
-        <!-- settings changer -->
-        <div class="skins-nav">
-            <a href="#" class="skin first_nav selected">
-                <span class="icon"></span><span class="text">Default skin</span>
-            </a>
-            <a href="#" class="skin second_nav" data-file="css/skins/dark.css">
-                <span class="icon"></span><span class="text">Dark skin</span>
-            </a>
-        </div>
+        @include('layout.skin')
 
         <div class="container-fluid">
 
@@ -334,17 +291,6 @@
     </div>
 
 
-	<!-- scripts -->
-    <script src="/js/jquery-latest.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
-    <script src="/js/jquery-ui-1.10.2.custom.min.js"></script>
-    <!-- knob -->
-    <script src="/js/jquery.knob.js"></script>
-    <!-- flot charts -->
-    <script src="/js/jquery.flot.js"></script>
-    <script src="/js/jquery.flot.stack.js"></script>
-    <script src="/js/jquery.flot.resize.js"></script>
-    <script src="/js/theme.js"></script>
 
     <script type="text/javascript">
         $(function () {

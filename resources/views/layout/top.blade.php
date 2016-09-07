@@ -1,3 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>响应式后台系统</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- bootstrap -->
+    <link href="/css/bootstrap/bootstrap.css" rel="stylesheet" />
+    <link href="/css/bootstrap/bootstrap-responsive.css" rel="stylesheet" />
+    <link href="/css/bootstrap/bootstrap-overrides.css" type="text/css" rel="stylesheet" />
+
+    <!-- libraries -->
+    <link href="/css/lib/jquery-ui-1.10.2.custom.css" rel="stylesheet" type="text/css" />
+    <link href="/css/lib/font-awesome.css" type="text/css" rel="stylesheet" />
+
+    <!-- global styles -->
+    <link rel="stylesheet" type="text/css" href="/css/layout.css" />
+    <link rel="stylesheet" type="text/css" href="/css/elements.css" />
+    <link rel="stylesheet" type="text/css" href="/css/icons.css" />
+
+    <!-- this page specific styles -->
+    <link rel="stylesheet" href="/css/compiled/index.css" type="text/css" media="screen" />
+
+    <!-- open sans font -->
+    <link href='/css/font1.css' rel='stylesheet' type='text/css' />
+
+    <!-- lato font -->
+    <link href='/css/font2.css' rel='stylesheet' type='text/css' />
+    <link rel="stylesheet" href="/css/compiled/tables.css" type="text/css" media="screen">
+
+    <!--[if lt IE 9]>
+    <script src="/js/html5.js"></script>
+    <![endif]-->
+
+    <!-- scripts -->
+    <script src="/js/jquery-latest.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/jquery-ui-1.10.2.custom.min.js"></script>
+    <!-- knob -->
+    <script src="/js/jquery.knob.js"></script>
+    <!-- flot charts -->
+    <script src="/js/jquery.flot.js"></script>
+    <script src="/js/jquery.flot.stack.js"></script>
+    <script src="/js/jquery.flot.resize.js"></script>
+    <script src="/js/theme.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
+<body>
+
 <!-- navbar -->
 <div class="navbar navbar-inverse">
     <div class="navbar-inner">
@@ -7,13 +56,13 @@
             <span class="icon-bar"></span>
         </button>
 
-        <a class="brand" href="index.html"><img src="/img/logo.png" /></a>
+        <a class="brand" href="/home/index"><img src="/img/logo.png" /></a>
 
         <ul class="nav pull-right">
             <li class="hidden-phone">
                 <input class="search" type="text" />
             </li>
-            <li class="notification-dropdown hidden-phone">
+            {{--<li class="notification-dropdown hidden-phone">
                 <a href="#" class="trigger">
                     <i class="icon-warning-sign"></i>
                     <span class="count">8</span>
@@ -96,27 +145,25 @@
                         </div>
                     </div>
                 </div>
-            </li>
+            </li>--}}
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle hidden-phone" data-toggle="dropdown">
-                    Your account
+                    {{session('user')['nickname']}}
                     <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a href="personal-info.html">Personal info</a></li>
-                    <li><a href="#">Account settings</a></li>
-                    <li><a href="#">Billing</a></li>
-                    <li><a href="#">Export your data</a></li>
-                    <li><a href="#">Send feedback</a></li>
+                    <li><a href="#">个人信息</a></li>
+                    <li><a href="#">修改密码</a></li>
+                    <li><a href="#">意见反馈</a></li>
                 </ul>
             </li>
-            <li class="settings hidden-phone">
-                <a href="personal-info.html" role="button">
-                    <i class="icon-cog"></i>
+            <li class="settings hidden-phone refresh">
+                <a href="javascript:;" role="button" title="刷新权限">
+                    <i class="icon-refresh"></i>
                 </a>
             </li>
-            <li class="settings hidden-phone">
-                <a href="signin.html" role="button">
+            <li class="settings hidden-phone" title="退出登录">
+                <a href="/login/logout" role="button">
                     <i class="icon-share-alt"></i>
                 </a>
             </li>
@@ -124,3 +171,17 @@
     </div>
 </div>
 <!-- end navbar -->
+<script>
+    $(function () {
+        $(".refresh").click(function () {
+            var url = "/permission/refresh";
+            $.ajax({url:url,type:'POST',data:'_token={{csrf_token()}}',success:function (data) {
+                if(data.code==200){
+                    location.reload();
+                }else{
+                    layer.alert('权限获取失败，请重试！',2000);
+                }
+            }});
+        });
+    })
+</script>

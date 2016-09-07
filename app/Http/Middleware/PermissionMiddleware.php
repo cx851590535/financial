@@ -16,7 +16,7 @@ class PermissionMiddleware
     public function handle($request, Closure $next)
     {
         $user = session('user');
-        $uri = $request->getgetrequestUri();
+        $uri = $request->getrequestUri();
         if(isset($user['permissionnames'])&&in_array($uri,$user['permissionnames'])){
             return $next($request);
         }

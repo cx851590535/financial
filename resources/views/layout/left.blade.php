@@ -88,6 +88,29 @@
                 <li><a href="signup.html">Sign up</a></li>
             </ul>
         </li>
+        @foreach(session('user')['permissions'] as $k => $v)
+            @if(isset($v['item']))
+                <li>
+                    <a class="dropdown-toggle" href="#">
+                        <i class="{{$v['class']}}"></i>
+                        <span>{{$v['display_name']}}</span>
+                        <i class="icon-chevron-down"></i>
+                    </a>
+                    <ul class="submenu">
+                        @foreach($v['item'] as $key => $val)
+                            <li><a href="{{$val['name']}}">{{$val['display_name']}}</a></li>
+                        @endforeach
+                    </ul>
+                </li>
+            @else
+                <li>
+                    <a href="{{$v['name']}}">
+                        <i class="{{$v['class']}}"></i>
+                        <span>{{$v['display_name']}}</span>
+                    </a>
+                </li>
+            @endif
+        @endforeach
     </ul>
 </div>
 <!-- end sidebar -->

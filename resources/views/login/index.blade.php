@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="login-bg">
 <head>
-    <title>Detail Admin - Sign in</title>
+    <title>Detail Admin - 登录</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="/css/compiled/signin.css" type="text/css" media="screen" />
 
     <!-- open sans font -->
-    <link href='font1.css' rel='stylesheet' type='text/css' />
+    <link href='/css/font1.css' rel='stylesheet' type='text/css' />
 
     <!--[if lt IE 9]>
     <script src="/js/html5.js"></script>
@@ -66,22 +66,22 @@
 
     <div class="span4 box">
         <div class="content-wrap">
-            <h6>Log in</h6>
+            <h6>登录</h6>
             <input class="span12" id="username" type="text" placeholder="E-mail address" />
             <input class="span12" id="password" type="password" placeholder="Your password" />
-            <a href="#" class="forgot">Forgot password?</a>
+            <a href="#" class="forgot">忘记密码?</a>
             <div class="remember">
                 <input id="remember-me" type="checkbox" />
-                <label for="remember-me">Remember me</label>
+                <label for="remember-me">记住密码</label>
             </div>
-            <a id="login" class="btn-glow primary login" href="javascript:;">Log in</a>
+            <a id="login" class="btn-glow primary login" href="javascript:;">登录</a>
         </div>
     </div>
 
-    <div class="span4 no-account">
+    {{--<div class="span4 no-account">
         <p>Don't have an account?</p>
         <a href="signup.html">Sign up</a>
-    </div>
+    </div>--}}
 </div>
 
 <!-- scripts -->
@@ -121,9 +121,9 @@
             e.preventDefault();
             $btns.removeClass("active");
             $(this).addClass("active");
-            var bg = $(this).data("/img");
+            var bg = $(this).data("img");
 
-            $("html").css("background-image", "url('img/bgs/" + bg + "')");
+            $("html").css("background-image", "url('/img/bgs/" + bg + "')");
         });
 
     });

@@ -14,22 +14,23 @@
 /*Route::get('/', function () {
     return view('welcome');
 });*/
-Route::get('/', function () {
-    return view('login.index');
-});
-
+Route::get('/','LoginController@index');
 Route::post('/login/login','LoginController@login');
 
 /*
  * 需要登录
  * */
 Route::group(['middleware'=>'login'],function (){
-    Route::get('/home/index','LoginController@index');//首页
+    Route::get('/home/index','LoginController@home');//首页
+    Route::get('/login/logout','LoginController@logout');//退出系统
+    Route::post('/permission/refresh','PermissionController@refresh');//刷新权限
 
     /*
      * 需要权限认证
      * */
     Route::group(['middleware'=>'permission'],function (){
+
+        Route::get('/permission/index','PermissionController@index');//权限管理
 
     });
 });
