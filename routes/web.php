@@ -30,7 +30,8 @@ Route::group(['middleware'=>'login'],function (){
      * */
     Route::group(['middleware'=>'permission'],function (){
 
-        Route::get('/permission/index','PermissionController@index');//权限管理
+        Route::get('/permission/index','PermissionController@index');//权限信息
+        Route::post('/permission/del','PermissionController@delete');//删除权限
 
     });
 });

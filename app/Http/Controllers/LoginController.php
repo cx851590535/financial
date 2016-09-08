@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\ArrayHelper;
 use App\Helper\ResponseHelper;
 use App\Service\PermissionService;
 use App\Service\UserService;
@@ -30,16 +31,9 @@ class LoginController extends Controller
         }
         $roleid = $user['roleid'];
         $permissions = PermissionService::getPermissionByRoleid($roleid);
-        $permission = array();
-        $permissionname = array();
-        foreach ($permissions as $k => $v){
-            $permissionname[] = $v['name'];
-            if($v['fid'] == 0){
-                $permission[$v['id']] = $v;
-            }else{
-                $permission[$v['fid']]['item'][] = $v;
-            }
-        }
+        $dealpermission = ArrayHelper::dealPermission($permissions);
+        $permission = $dealpermission[0];
+        $permissionname = $dealpermission[1];
         $user['permissions'] = $permission;
         $user['permissionnames'] = $permissionname;
         session(['user'=>$user]);

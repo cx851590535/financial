@@ -13,14 +13,18 @@
     <!-- libraries -->
     <link href="/css/lib/jquery-ui-1.10.2.custom.css" rel="stylesheet" type="text/css" />
     <link href="/css/lib/font-awesome.css" type="text/css" rel="stylesheet" />
+    <link href="/css/lib/bootstrap.datepicker.css" type="text/css" rel="stylesheet" />
+
 
     <!-- global styles -->
     <link rel="stylesheet" type="text/css" href="/css/layout.css" />
     <link rel="stylesheet" type="text/css" href="/css/elements.css" />
     <link rel="stylesheet" type="text/css" href="/css/icons.css" />
 
+
     <!-- this page specific styles -->
-    <link rel="stylesheet" href="/css/compiled/index.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/css/compiled/ui-elements.css" type="text/css" media="screen" />
+
 
     <!-- open sans font -->
     <link href='/css/font1.css' rel='stylesheet' type='text/css' />
@@ -37,6 +41,7 @@
     <script src="/js/jquery-latest.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/jquery-ui-1.10.2.custom.min.js"></script>
+    <script src="/js/bootstrap.datepicker.js"></script>
     <!-- knob -->
     <script src="/js/jquery.knob.js"></script>
     <!-- flot charts -->
@@ -44,6 +49,7 @@
     <script src="/js/jquery.flot.stack.js"></script>
     <script src="/js/jquery.flot.resize.js"></script>
     <script src="/js/theme.js"></script>
+    <script src="/js/layer.js"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
 <body>
 

@@ -14,5 +14,22 @@ class ArrayHelper extends Helper
         return $result;
     }
 
+    /*
+     * 权限数组整理
+     * */
+    public static function dealPermission($permissions){
+        $permission = array();
+        $permissionname = array();
+        foreach ($permissions as $k => $v){
+            $permissionname[] = $v['name'];
+            if($v['fid'] == 0){
+                $permission[$v['id']] = $v;
+            }else{
+                $permission[$v['fid']]['item'][] = $v;
+            }
+        }
+        return array($permission,$permissionname);
+    }
+
 }
 ?>

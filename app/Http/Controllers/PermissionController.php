@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\ArrayHelper;
 use App\Helper\ResponseHelper;
 use App\Model\Permission;
 use App\Service\PermissionService;
@@ -16,16 +17,9 @@ class PermissionController extends Controller
         $user = session('user');
         $roleid = $user['roleid'];
         $permissions = PermissionService::getPermissionByRoleid($roleid);
-        $permission = array();
-        $permissionname = array();
-        foreach ($permissions as $k => $v){
-            $permissionname[] = $v['name'];
-            if($v['fid'] == 0){
-                $permission[$v['id']] = $v;
-            }else{
-                $permission[$v['fid']]['item'][] = $v;
-            }
-        }
+        $dealpermission = ArrayHelper::dealPermission($permissions);
+        $permission = $dealpermission[0];
+        $permissionname = $dealpermission[1];
         $user['permissions'] = $permission;
         $user['permissionnames'] = $permissionname;
         session(['user'=>$user]);
@@ -33,8 +27,38 @@ class PermissionController extends Controller
     }
     //权限列表
     public function index(Request $request){
-        $permissions = Permission::all()->toArray();
-        dump($permissions);
-        return view('permission.index')->with('permissions',$permissions);
+        $searchkey = $request -> get('searchkey','');
+        $searchvalue = $request -> get('searchvalue','');
+        $perpage = $request -> get('perpage',1);
+        if(!empty($searchkey)){
+            $permissions = Permission::where($searchkey,'like','%'.$searchvalue.'%')->paginate($perpage)->toArray();
+        }else{
+            $permissions = Permission::paginate($perpage)->toArray();
+        }
+
+        $permissionNewArr = array();
+        foreach ($permissions['data'] as $k => $v){
+            if($v['fid'] > 0){
+                //获取父级目录名称
+                $fpermission = Permission::find($v['fid']);
+                $permissions['data'][$k]['fname'] = $fpermission['display_name'];
+            }
+        }
+        $permissions['searchkey'] = $searchkey;
+        $permissions['searchvalue'] = $searchvalue;
+        $permissions['fpermissions'] = Permission::where('fid','0')->get(array('id','display_name'))->toArray();
+        return view('permission.index')->with('data',$permissions);
+    }
+    //删除权限
+    public function delete(Request $request){
+        $id = $request -> get('id','');
+        if(empty($id)){
+            return ResponseHelper::error('删除失败，请刷新后重试');
+        }
+        $permission = Permission::find($id);
+        if($permission -> delete()){
+            return ResponseHelper::success();
+        }
+        return ResponseHelper::error('删除失败，请刷新后重试');
     }
 }
