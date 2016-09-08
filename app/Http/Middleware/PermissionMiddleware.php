@@ -24,7 +24,7 @@ class PermissionMiddleware
         if($request->getMethod() == 'GET'){
             return redirect('/');
         }else{
-            return ResponseHelper::error('对不起，您没有操作此功能的权限');
+            return redirect('/permission/denied');
         }
 
 

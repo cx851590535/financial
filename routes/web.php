@@ -15,6 +15,9 @@
     return view('welcome');
 });*/
 Route::get('/','LoginController@index');
+Route::get('/permission/denied',function (){
+    return array('code'=>400,'msg'=>'无权限');
+});
 Route::post('/login/login','LoginController@login');
 
 /*
