@@ -50,6 +50,7 @@
     <script src="/js/jquery.flot.resize.js"></script>
     <script src="/js/theme.js"></script>
     <script src="/js/layer.js"></script>
+    <script src="/js/all.js"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
 <body>
 

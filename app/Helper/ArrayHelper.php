@@ -22,11 +22,14 @@ class ArrayHelper extends Helper
         $permissionname = array();
         foreach ($permissions as $k => $v){
             $permissionname[] = $v['name'];
-            if($v['fid'] == 0){
-                $permission[$v['id']] = $v;
-            }else{
-                $permission[$v['fid']]['item'][] = $v;
+            if($v['type'] == 1){
+                if($v['fid'] == 0){
+                    $permission[$v['id']] = $v;
+                }else{
+                    $permission[$v['fid']]['item'][] = $v;
+                }
             }
+
         }
         return array($permission,$permissionname);
     }

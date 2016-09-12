@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helper\ArrayHelper;
 use App\Helper\ResponseHelper;
 use App\Model\Permission;
+use App\Model\Role;
 use App\Service\PermissionService;
 use Illuminate\Http\Request;
 
@@ -29,7 +30,7 @@ class PermissionController extends Controller
     public function index(Request $request){
         $searchkey = $request -> get('searchkey','');
         $searchvalue = $request -> get('searchvalue','');
-        $perpage = $request -> get('perpage',1);
+        $perpage = $request -> get('perpage',20);
         if(!empty($searchkey)){
             $permissions = Permission::where($searchkey,'like','%'.$searchvalue.'%')->paginate($perpage)->toArray();
         }else{
@@ -60,5 +61,15 @@ class PermissionController extends Controller
             return ResponseHelper::success();
         }
         return ResponseHelper::error('删除失败，请刷新后重试');
+    }
+
+    //权限分配
+    public function roleshow(Request $request){
+        $roles = Role::all()->toArray();
+        $permissions = Permission::all()->toArray();
+        $dealpermission = ArrayHelper::dealPermission($permissions);
+        $data = array('permissions'=>$dealpermission[0],'roles'=>$roles);
+        //dump($data);
+        return view('permission.roleshow')->with('data',$data);
     }
 }

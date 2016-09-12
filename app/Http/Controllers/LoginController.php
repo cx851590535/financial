@@ -62,4 +62,12 @@ class LoginController extends Controller
         $request->session()->flush();
         return redirect('/');
     }
+
+    /*
+     *
+     * 无权限
+     * */
+    public function permissiondenied(Request $request){
+        return ResponseHelper::error('对不起，您没有此功能的操作权限！');
+    }
 }

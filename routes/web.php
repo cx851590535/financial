@@ -15,9 +15,7 @@
     return view('welcome');
 });*/
 Route::get('/','LoginController@index');
-Route::get('/permission/denied',function (){
-    return array('code'=>400,'msg'=>'无权限');
-});
+Route::get('/permission/denied','LoginController@permissiondenied');
 Route::post('/login/login','LoginController@login');
 
 /*
@@ -33,8 +31,15 @@ Route::group(['middleware'=>'login'],function (){
      * */
     Route::group(['middleware'=>'permission'],function (){
 
+        /**
+         * 权限相关
+         * */
         Route::get('/permission/index','PermissionController@index');//权限信息
         Route::post('/permission/del','PermissionController@delete');//删除权限
+        Route::post('/permission/add','PermissionController@add');//添加权限
+
+        Route::get('/permission/role/show','PermissionController@roleshow');//权限分配页面
+        Route::post('/permission/role/set','PermissionController@roleset');//权限分配功能
 
     });
 });

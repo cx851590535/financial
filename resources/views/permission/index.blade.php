@@ -442,7 +442,10 @@
         })
        $(".choseicon").click(function () {
            var key = $(this).attr("key");
-           $(".icons-wrapper").find("."+$("#class"+key).val()).parent("li").css("color","#d82a2a");
+           if($("#class"+key).val()){
+               $(".icons-wrapper").find("."+$("#class"+key).val()).parent("li").css("color","#d82a2a");
+           }
+
            layer.open({
                type: 1,
                title: '请选择图标',
