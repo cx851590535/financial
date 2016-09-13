@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use App\Helper\ArrayHelper;
 use App\Helper\ResponseHelper;
 use App\Model\Permission;
+use App\Model\PermissionRole;
 use App\Model\Role;
 use App\Service\PermissionService;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\DB;
+use League\Flysystem\Exception;
 
 class PermissionController extends Controller
 {
@@ -57,19 +60,88 @@ class PermissionController extends Controller
             return ResponseHelper::error('删除失败，请刷新后重试');
         }
         $permission = Permission::find($id);
-        if($permission -> delete()){
+        try{
+            DB::transaction(function () use($permission,$id){
+                PermissionRole::where("permission_id",$id)->delete();
+                $permission -> delete();
+            });
+            return ResponseHelper::success();
+        }catch (Exception $e){
+            return ResponseHelper::error('删除失败，请刷新后重试');
+        }
+    }
+    //添加权限
+    public function add(Request $request){
+        $pname = $request -> input('pname','');
+        $picon = $request -> input('picon','');
+        $proute = $request -> input('proute','');
+        $pdescri = $request -> input('pdescri','');
+        $pid = $request -> input('pfid','');
+        $porder = $request -> input('porder','');
+        $type = $request -> input('type',1);
+        if(empty($pname)){
+            return ResponseHelper::error('请输入权限名称！');
+        }
+        $permission = new Permission();
+        $permission -> display_name = $pname;
+        $permission -> fid = $pid;
+        $permission -> class = $picon;
+        $permission -> name = $proute;
+        $permission -> description = $pdescri;
+        $permission -> order = $porder;
+        $permission -> type = $type;
+        if($permission -> save()){
             return ResponseHelper::success();
         }
-        return ResponseHelper::error('删除失败，请刷新后重试');
+        return ResponseHelper::error('权限添加失败！');
     }
 
     //权限分配
     public function roleshow(Request $request){
         $roles = Role::all()->toArray();
-        $permissions = Permission::all()->toArray();
-        $dealpermission = ArrayHelper::dealPermission($permissions);
+        $permissions = Permission::orderBy('fid','ASC')->get()->toArray();
+        $dealpermission = ArrayHelper::dealPermission($permissions,true);
         $data = array('permissions'=>$dealpermission[0],'roles'=>$roles);
-        //dump($data);
         return view('permission.roleshow')->with('data',$data);
+    }
+    public function roleset(Request $request){
+        $role = $request -> input('role','');
+        $permissions = $request -> input('permissions','');
+        if(empty($role)){
+            return ResponseHelper::error('请选中一个角色！');
+        }
+        if(empty($permissions)){
+            return ResponseHelper::error('请至少勾选一个权限！');
+        }
+        $permissionarr = explode(',',$permissions);
+        $data = array();
+        foreach ($permissionarr as $k => $v){
+            $data[$k]['permission_id'] = $v;
+            $data[$k]['role_id'] = $role;
+        }
+        try{
+            DB::transaction(function () use ($role,$data){
+                PermissionRole::where('role_id',$role)->delete();
+                PermissionRole::insert($data);
+            });
+            return ResponseHelper::success();
+        }catch (Exception $e){
+            return ResponseHelper::error('权限写入失败！');
+        }
+
+    }
+    public function getPermissionByRole(Request $request){
+        $role = $request -> get('role','');
+        if(empty($role)){
+            return ResponseHelper::error('请选择一个角色！');
+        }else{
+            $permissions = PermissionService::getPermissionByRoleid($role,'id');
+            /*$data = array();
+            foreach ($permissions as $k => $v){
+                $data[] = $v['permission_id'];
+            }
+            return ResponseHelper::success($data);*/
+            return ResponseHelper::success($permissions);
+        }
     }
 }

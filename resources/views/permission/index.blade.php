@@ -9,7 +9,7 @@
     @include('layout.skin')
 
     <div class="container-fluid">
-        <div id="pad-wrapper">
+        <div id="pad-wrapper" class="form-page">
 
             <!-- products table-->
             <!-- the script for the toggle all checkboxes from header is located in js/theme.js -->
@@ -44,7 +44,7 @@
                         </div>
                         <input type="text" class="search searchvalue" placeholder="查找" onkeydown="checkEnter(event)" value="{{$data['searchvalue']}}"/>
                         <a class="btn-flat danger clear">清空条件</a>
-                        <a class="btn-flat success new-product">添加权限</a>
+                        <a class="btn-flat success btn-add">添加权限</a>
                     </div>
                 </div>
 
@@ -151,6 +151,63 @@
             </div>
             <!-- end products table -->
             @include('layout.paginat')
+
+
+            <!-- 添加权限 -->
+            <div id="add-permission" style="display: none;">
+                <div class="row-fluid form-wrapper" style="margin: 5%;width:95%;">
+                    <!-- left column -->
+                    <div class="span8 column">
+                        <form >
+                            <div class="field-box">
+                                <label>名称:</label>
+                                <input class="span8" type="text" id="pname"/>
+                            </div>
+                            <div class="field-box">
+                                <label>图标:</label>
+                                <i class="" id="iadd"></i>
+                                <a class="choseicon" key="add" style="cursor: pointer;text-decoration: none;">选择图标</a>
+                                <input type="hidden" class="classname" id="classadd">
+                            </div>
+                            <div class="field-box">
+                                <label>路由:</label>
+                                <input class="span8" type="text" id="proute"/>
+                            </div>
+                            <div class="field-box">
+                                <label>描述:</label>
+                                <input class="span8" type="text" id="pdescri"/>
+                            </div>
+                            <div class="field-box">
+                                <label>父级目录:</label>
+                                <div class="ui-select">
+                                    <select class="fid " id="pfid">
+                                        <option value="0" selected/>无
+                                            @foreach($data['fpermissions'] as $key => $val)
+                                                <option value="{{$val['id']}}" />{{$val['display_name']}}
+                                            @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="field-box">
+                                <label>类型:</label>
+                                <div class="ui-select">
+                                    <select class="type " id="type">
+                                        <option value="1" selected/>菜单
+                                        <option value="2" />功能
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="field-box">
+                                <label>序号（越小越靠前）:</label>
+                                <input class="span8" type="text" id="porder"/>
+                            </div>
+                            <a class="btn-flat success btn-save">保存</a>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
@@ -436,31 +493,56 @@
 </style>
 <script>
     $(function () {
+        var content = $("#add-permission").html();
         $(".clear").click(function () {
             $(".searchkey").val("");
             $(".searchvalue").val("");
-        })
-       $(".choseicon").click(function () {
-           var key = $(this).attr("key");
-           if($("#class"+key).val()){
-               $(".icons-wrapper").find("."+$("#class"+key).val()).parent("li").css("color","#d82a2a");
-           }
+        });
+        
+        $(".choseicon").click(function () {
+           showicon($(this));
+        });
+        
+        $(".btn-add").click(function () {
+            $("#add-permission").remove();
+            layer.open({
+                type: 1,
+                title: '添加权限',
+                skin: 'layui-layer-rim', //加上边框
+                area: ['800px', '600px'], //宽高
+                content: content
+            });
+            $(".choseicon").click(function () {
+                showicon($(this));
+            });
+            $(".btn-save").click(function () {
+                var pname = $("#pname").val();
+                var picon = $("#classadd").val();
+                var proute = $("#proute").val();
+                var pdescri = $("#pdescri").val();
+                var pfid = $("#pfid").val();
+                var porder = $("#porder").val();
+                var type = $("#type").val();
+                if(!pname){
+                    layer.alert('请输入名称！');
+                    return false;
+                }
+                $.ajax({
+                    url:'/permission/add',
+                    type:'POST',
+                    data:'pname='+pname+'&picon='+picon+'&proute='+proute+'&pdescri='+pdescri+'&type='+type+'&pfid='+pfid+'&porder='+porder+'&_token={{csrf_token()}}',
+                    success:function (data) {
+                        if(data.code==200){
+                            layer.alert('添加成功！');
+                            location.reload();
+                        }else{
+                            layer.alert(data.msg,2000);
+                        }
+                    }
+                })
+            })
+        });
 
-           layer.open({
-               type: 1,
-               title: '请选择图标',
-               skin: 'layui-layer-rim', //加上边框
-               area: ['800px', '600px'], //宽高
-               content: $("#iconstyles").html()
-           });
-           $(".icons-wrapper").find("li").click(function () {
-               var iconclass = $(this).find("i").attr("class");
-               $("#class"+key).val(iconclass);
-               $("#i"+key).removeClass().addClass(iconclass);
-               $(".icons-wrapper").find("li").css("color","#333333");
-               $(this).css("color","#d82a2a");
-           });
-       }); 
     });
     function checkEnter(event){
         if(event.keyCode==13){
@@ -484,13 +566,34 @@
                 type:'post',
                 success:function (data) {
                if(data.code==200){
-                   layer.alert('删除完成！',2000);
+                   layer.alert('删除完成');
                    location.reload();
                }else{
                    layer.alert(data.msg);
                }
             }});
         }
+    }
+    function showicon(obj){
+        var key = obj.attr("key");
+        if($("#class"+key).val()){
+            $(".icons-wrapper").find("."+$("#class"+key).val()).parent("li").css("color","#d82a2a");
+        }
+
+        layer.open({
+            type: 1,
+            title: '请选择图标',
+            skin: 'layui-layer-rim', //加上边框
+            area: ['800px', '600px'], //宽高
+            content: $("#iconstyles").html()
+        });
+        $(".icons-wrapper").find("li").click(function () {
+            var iconclass = $(this).find("i").attr("class");
+            $("#class"+key).val(iconclass);
+            $("#i"+key).removeClass().addClass(iconclass);
+            $(".icons-wrapper").find("li").css("color","#333333");
+            $(this).css("color","#d82a2a");
+        });
     }
 </script>
 </html>

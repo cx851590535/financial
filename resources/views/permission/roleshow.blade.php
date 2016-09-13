@@ -37,7 +37,7 @@
                         <form>
                             <div class="field-box">
                                 <label>角色选择:</label>
-                                <select id="plan" class="span5">
+                                <select id="role" class="span5">
                                     <option value="0">请选择</option>
                                     @foreach($data['roles'] as $k => $v)
                                         <option value="{{$v['id']}}">{{$v['name']}}</option>
@@ -65,7 +65,7 @@
                                     <label class="checkbox" style="font-weight: 600">
                                         <div class="checker">
                                             <span>
-                                                <input type="checkbox" id="check{{$v['id']}}" class="checkbox_f" value="{{$v['id']}}">
+                                                <input type="checkbox" name="permission" id="check{{$v['id']}}" class="checkbox_f pid_{{$v['id']}}" value="{{$v['id']}}">
                                             </span>
                                         </div>
                                         {{$v['display_name']}}({{$v['description']}})
@@ -74,16 +74,19 @@
                                     @if(isset($v['item'])&&count($v['item'])>0)
                                     <div class="row-fluid">
                                        @foreach($v['item'] as $key => $val)
-                                             <div class="span3" style="text-align: left">
+                                             <div class="span3" style="text-align: center">
                                                 <label class="checkbox" style="width: 100%">
                                                     <div class="checker">
                                                     <span>
-                                                        <input type="checkbox"  class="check_{{$val['fid']}}" value="{{$val['id']}}" key="{{$val['fid']}}" onchange="checkF($(this))">
+                                                        <input type="checkbox" name="permission"  class="check_{{$val['fid']}} pid_{{$val['id']}}" value="{{$val['id']}}" key="{{$val['fid']}}" onchange="checkF($(this))">
                                                     </span>
                                                     </div>
-                                                    {{$val['display_name']}} ({{$val['type']==1?'菜单':'功能'}}：{{$v['description']}})
+                                                    {{$val['display_name']}} ({{$val['type']==1?'菜单':'功能'}}：{{$val['description']}})
                                                 </label>
                                              </div>
+                                            @if(($key+1)%4==0)
+                                                </div><div class="row-fluid">
+                                            @endif
                                        @endforeach
                                     </div>
                                     @endif
@@ -121,6 +124,58 @@
             }else{
                 $(".check_"+key).parent("span").removeClass("checked");
                 $(".check_"+key).prop('checked',false);
+            }
+        });
+        $(".bt-save").click(function () {
+            var role = $("#role").val();
+            if(role==0){
+                layer.alert('请选择要操作权限的角色',2000);
+                return false;
+            }
+            var checkboxes = $("input:checkbox[name=permission]:checked");
+            var spCodesTemp = '';
+            checkboxes.each(function (i) {
+                if(0==i){
+                    spCodesTemp = $(this).val();
+                }else{
+                    spCodesTemp += (","+$(this).val());
+                }
+            });
+            $.ajax({
+                url:'/permission/role/set',
+                type:'POST',
+                data:'role='+role+'&permissions='+spCodesTemp+'&_token={{csrf_token()}}',
+                success:function (data) {
+                    if(data.code==200){
+                        layer.alert('权限分配成功',2000);
+                    }else{
+                        layer.alert(data.msg,2000);
+                    }
+                }
+            });
+
+        });
+        $("#role").change(function () {
+            if($(this).val()>0){
+                $.ajax({
+                    url:'/permission/role/get',
+                    data:'role='+$(this).val()+'&_token={{csrf_token()}}',
+                    type:'POST',
+                    success:function (data) {
+                        if(data.code==200){
+                            data = data.data;
+                            $.each(data,function (i,item) {
+                                $(".pid_"+item['permission_id']).prop("checked",true);
+                                $(".pid_"+item['permission_id']).parent("span").addClass("checked");
+                            });
+
+                        }else{
+                            layer.alert(data.msg,2000);
+                        }
+                    }
+                })
+            }else{
+              $(".checked").removeClass("checked");
             }
         });
     });

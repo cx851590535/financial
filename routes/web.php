@@ -40,6 +40,7 @@ Route::group(['middleware'=>'login'],function (){
 
         Route::get('/permission/role/show','PermissionController@roleshow');//权限分配页面
         Route::post('/permission/role/set','PermissionController@roleset');//权限分配功能
+        Route::post('/permission/role/get','PermissionController@getPermissionByRole');//根据角色获取权限
 
     });
 });

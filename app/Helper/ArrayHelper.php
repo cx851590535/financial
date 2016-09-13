@@ -17,12 +17,13 @@ class ArrayHelper extends Helper
     /*
      * 权限数组整理
      * */
-    public static function dealPermission($permissions){
+    public static function dealPermission($permissions,$type=false){
         $permission = array();
         $permissionname = array();
-        foreach ($permissions as $k => $v){
-            $permissionname[] = $v['name'];
-            if($v['type'] == 1){
+        if($type){
+            foreach ($permissions as $k => $v){
+                $permissionname[] = $v['name'];
+                //处理所有权限
                 if($v['fid'] == 0){
                     $permission[$v['id']] = $v;
                 }else{
@@ -30,6 +31,18 @@ class ArrayHelper extends Helper
                 }
             }
 
+        }else{
+            foreach ($permissions as $k => $v){
+                $permissionname[] = $v['name'];
+                //只处理菜单权限
+                if($v['type'] == 1) {
+                    if ($v['fid'] == 0) {
+                        $permission[$v['id']] = $v;
+                    } else {
+                        $permission[$v['fid']]['item'][] = $v;
+                    }
+                }
+            }
         }
         return array($permission,$permissionname);
     }

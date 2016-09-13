@@ -18,9 +18,12 @@ class PermissionService extends Service
     /*
      * 根据角色编号获取权限
      * */
-    public static function getPermissionByRoleid($roleid){
+    public static function getPermissionByRoleid($roleid,$field='all'){
         if($roleid){
             $permissionids = PermissionRole::where('role_id',$roleid)->get(array('permission_id'))->toArray();
+            if($field=='id'){
+                return $permissionids;
+            }
             $permissionids = ArrayHelper::arrs2arr($permissionids,'permission_id');
             $permissions = Permission::whereIn('id',$permissionids)->orderBy('fid','ASC')->orderBy('order','ASC')->get()->toArray();
             //$permissions = ArrayHelper::arrs2arr($permissions,'name');
