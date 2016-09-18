@@ -62,7 +62,7 @@
                         @foreach($data['permissions'] as $k => $v)
                             <div class="row-fluid" style="border: 1px solid #edeff1;">
                                 <div class="span12 form-wrapper" style="text-align: left">
-                                    <label class="checkbox" style="font-weight: 600">
+                                    <label class="checkbox" style="font-weight: 600;width: 100%">
                                         <div class="checker">
                                             <span>
                                                 <input type="checkbox" name="permission" id="check{{$v['id']}}" class="checkbox_f pid_{{$v['id']}}" value="{{$v['id']}}">

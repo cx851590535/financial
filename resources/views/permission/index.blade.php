@@ -65,6 +65,9 @@
                                 <span class="line"></span>描述
                             </th>
                             <th class="span3">
+                                <span class="line"></span>类型
+                            </th>
+                            <th class="span3">
                                 <span class="line"></span>父级目录
                             </th>
                             <th class="span3">
@@ -95,14 +98,26 @@
                                     <label>
                                         {{$v['name']}}
                                     </label>
-                                    <input type="text" class="modifyform display_name hide" value="{{$v['name']}}"/>
+                                    <input type="text" class="modifyform name hide" value="{{$v['name']}}"/>
                                 </td>
                                 <td class="description">
                                     <label>
                                         {{$v['description']}}
                                     </label>
 
-                                    <input type="text" class="modifyform display_name hide" value="{{$v['description']}}"/>
+                                    <input type="text" class="modifyform pdescription hide" value="{{$v['description']}}"/>
+                                </td>
+                                <td class="description">
+                                    <label>
+                                        {{$v['type']==1?'菜单':'功能'}}
+                                    </label>
+
+                                    <div class="ui-select modifyform hide">
+                                        <select class="type">
+                                            <option value="1" {{$v['type']==1?'selected':''}}/>菜单
+                                            <option value="2" {{$v['type']==2?'selected':''}}/>功能
+                                        </select>
+                                    </div>
                                 </td>
                                 <td class="fid">
                                         @if(isset($v['fname']))
@@ -135,7 +150,7 @@
                                     <label>
                                         {{$v['order']}}
                                     </label>
-                                    <input type="text" class="modifyform order hide" value="{{$v['order']}}"/>
+                                    <input type="text" class="modifyform porder hide" value="{{$v['order']}}"/>
                                 </td>
                                 <td>
                                     <ul class="actions">
@@ -539,8 +554,8 @@
                             layer.alert(data.msg,2000);
                         }
                     }
-                })
-            })
+                });
+            });
         });
 
     });
@@ -550,11 +565,44 @@
             location.href=url;
         }
     }
+    function hrefadd(url) {
+        url += "&searchkey={{$data['searchkey']}}&searchvalue={{$data['searchvalue']}}";
+        location.href = url;
+    }
     function modifypermission(id,obj) {
         if(obj.html()=='修改'){
             $(".tbl_tr_"+id).find("label").hide();
             $(".tbl_tr_"+id).find(".modifyform").removeClass('hide').show();
             obj.html('保存')
+        }else{
+            var pname = $(".tbl_tr_"+id).find(".display_name").val();
+            var picon = $(".tbl_tr_"+id).find(".classname").val();
+            var proute = $(".tbl_tr_"+id).find(".name").val();
+            var pdescri = $(".tbl_tr_"+id).find(".pdescription").val();
+            var pfid = $(".tbl_tr_"+id).find(".fid").val();
+            var porder = $(".tbl_tr_"+id).find(".porder").val();
+            var type = $(".tbl_tr_"+id).find(".type").val();;
+            if(!pname){
+                layer.alert('请输入名称！');
+                return false;
+            }
+            if(!id){
+                layer.alert('修改失败，请刷新页面后再试！');
+                return false;
+            }
+            $.ajax({
+                url:'/permission/add',
+                type:'POST',
+                data:'id='+id+'&pname='+pname+'&picon='+picon+'&proute='+proute+'&pdescri='+pdescri+'&type='+type+'&pfid='+pfid+'&porder='+porder+'&_token={{csrf_token()}}',
+                success:function (data) {
+                    if(data.code==200){
+                        layer.alert('修改成功！');
+                        location.reload();
+                    }else{
+                        layer.alert(data.msg,2000);
+                    }
+                }
+            });
         }
 
     }

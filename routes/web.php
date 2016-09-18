@@ -37,10 +37,17 @@ Route::group(['middleware'=>'login'],function (){
         Route::get('/permission/index','PermissionController@index');//权限信息
         Route::post('/permission/del','PermissionController@delete');//删除权限
         Route::post('/permission/add','PermissionController@add');//添加权限
-
+        Route::post('/permission/modfy','PermissionController@add');//修改权限
+        /* *
+         * 权限分配相关
+         * */
         Route::get('/permission/role/show','PermissionController@roleshow');//权限分配页面
         Route::post('/permission/role/set','PermissionController@roleset');//权限分配功能
         Route::post('/permission/role/get','PermissionController@getPermissionByRole');//根据角色获取权限
+        /* *
+         * 用户相关
+         * */
+        Route::get('/user/index','UserController@index');//权限信息
 
     });
 });

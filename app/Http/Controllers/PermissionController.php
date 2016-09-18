@@ -40,7 +40,6 @@ class PermissionController extends Controller
             $permissions = Permission::paginate($perpage)->toArray();
         }
 
-        $permissionNewArr = array();
         foreach ($permissions['data'] as $k => $v){
             if($v['fid'] > 0){
                 //获取父级目录名称
@@ -72,17 +71,29 @@ class PermissionController extends Controller
     }
     //添加权限
     public function add(Request $request){
+        $id = $request -> input('id','');
         $pname = $request -> input('pname','');
         $picon = $request -> input('picon','');
         $proute = $request -> input('proute','');
         $pdescri = $request -> input('pdescri','');
         $pid = $request -> input('pfid','');
-        $porder = $request -> input('porder','');
+        $porder = $request -> input('porder',0);
         $type = $request -> input('type',1);
         if(empty($pname)){
             return ResponseHelper::error('请输入权限名称！');
         }
-        $permission = new Permission();
+        if(empty($id)){
+            $permission = new Permission();
+        }else{
+            $permission = Permission::find($id);
+            if(empty($permission)){
+                return ResponseHelper::error('操作失败！');
+            }
+        }
+        if(empty($pid)){
+            $pid = 0;
+        }
+
         $permission -> display_name = $pname;
         $permission -> fid = $pid;
         $permission -> class = $picon;
@@ -93,7 +104,7 @@ class PermissionController extends Controller
         if($permission -> save()){
             return ResponseHelper::success();
         }
-        return ResponseHelper::error('权限添加失败！');
+        return ResponseHelper::error('操作失败！');
     }
 
     //权限分配
