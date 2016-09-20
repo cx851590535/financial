@@ -63,9 +63,9 @@ class UserController extends Controller
         }
         $users = new User();
         $users -> account = $account;
-        $users -> password = $password;
+        $users -> password = md5($password);
         $users -> nickname = $nickname;
-        $users -> role = $role;
+        $users -> roleid = $role;
         $users -> status = $status;
         if($users -> save()){
             return ResponseHelper::success();
@@ -102,9 +102,10 @@ class UserController extends Controller
     }
 
     //禁用用户
-    public function limit(Request $request){
+    public function forbid(Request $request){
         $uid = $request -> input('uid','');
         $status = $request -> input('status',2);
+        $status = $status == 1?2:1;
         if(empty($uid)){
             return ResponseHelper::error('参数错误，操作失败，请刷新后再试！');
         }

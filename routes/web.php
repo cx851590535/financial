@@ -47,7 +47,15 @@ Route::group(['middleware'=>'login'],function (){
         /* *
          * 用户相关
          * */
-        Route::get('/user/index','UserController@index');//权限信息
+        Route::get('/user/index','UserController@index');//用户列表
+        Route::post('/user/del','UserController@delete');//删除用户
+        Route::post('/user/forbid','UserController@forbid');//禁用
+        Route::post('/user/add','UserController@add');//添加用户
+        Route::post('/user/check','UserController@isused');//判断用户是否存在
+        /* *
+         * 角色相关
+         * */
+        Route::get('/role/index','RoleController@index');//角色列表
 
     });
 });

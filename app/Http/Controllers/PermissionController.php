@@ -8,6 +8,7 @@ use App\Model\Permission;
 use App\Model\PermissionRole;
 use App\Model\Role;
 use App\Service\PermissionService;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -80,7 +81,11 @@ class PermissionController extends Controller
         $porder = $request -> input('porder',0);
         $type = $request -> input('type',1);
         if(empty($pname)){
-            return ResponseHelper::error('请输入权限名称！');
+            return ResponseHelper::error('请输入权限名称(路由)！');
+        }
+        $permission = Permission::where('name',$proute)->count();
+        if($permission>0){
+            return ResponseHelper::error('权限名称(路由)不能重复！');
         }
         if(empty($id)){
             $permission = new Permission();
@@ -93,18 +98,23 @@ class PermissionController extends Controller
         if(empty($pid)){
             $pid = 0;
         }
+        if(empty($porder)){
+            $porder = 0;
+        }
 
         $permission -> display_name = $pname;
         $permission -> fid = $pid;
-        $permission -> class = $picon;
+        $permission ->class = $picon;
         $permission -> name = $proute;
         $permission -> description = $pdescri;
         $permission -> order = $porder;
         $permission -> type = $type;
-        if($permission -> save()){
+        try{
+            $permission -> save();
             return ResponseHelper::success();
+        }catch (QueryException $e){
+            return ResponseHelper::error('操作失败！');
         }
-        return ResponseHelper::error('操作失败！');
     }
 
     //权限分配

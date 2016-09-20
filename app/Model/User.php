@@ -3,11 +3,10 @@
 namespace App\Model;
 
 
-use Zizaco\Entrust\Traits\EntrustUserTrait;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable
+class User extends Model
 {
     //
-    use EntrustUserTrait;
+    protected $primaryKey = 'uid';
 }

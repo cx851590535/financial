@@ -20,6 +20,7 @@
     <link rel="stylesheet" type="text/css" href="/css/layout.css" />
     <link rel="stylesheet" type="text/css" href="/css/elements.css" />
     <link rel="stylesheet" type="text/css" href="/css/icons.css" />
+    <link rel="stylesheet" href="/css/compiled/form-wizard.css" type="text/css" media="screen">
 
 
     <!-- this page specific styles -->

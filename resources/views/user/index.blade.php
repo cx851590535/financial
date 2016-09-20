@@ -21,10 +21,10 @@
                 </div>
 
                 <div class="row-fluid filter-block">
-                    账号：<input type="text" class="search searchvalue" value="{{$data['account']}}"/>
-                    昵称：<input type="text" class="search searchvalue" value="{{$data['nickname']}}"/>
+                    账号：<input type="text" class="form-search search account" value="{{$data['account']}}" onkeydown="checkEnter()"/>
+                    昵称：<input type="text" class="form-search search nickname" value="{{$data['nickname']}}" onkeydown="checkEnter()"/>
                     角色：<div class="ui-select">
-                            <select class="searchkey">
+                            <select class="form-search role">
                                 <option value=""/>请选择
                                 @foreach($data['role'] as $v)
                                 <option value="{{$v['id']}}"
@@ -36,7 +36,7 @@
                             </select>
                         </div>
                     状态：<div class="ui-select">
-                            <select class="searchkey">
+                            <select class="form-search status">
                                 <option value=""/>请选择
                                 <option value="1"
                                         @if($data['status']==1)
@@ -52,7 +52,7 @@
                             </select>
                         </div>
 
-                        <a class="btn-flat danger clear">搜错</a>
+                        <a class="btn-flat default" onclick="redirect()">搜索</a>
                         <a class="btn-flat danger clear">清空条件</a>
                         <a class="btn-flat success btn-add">添加用户</a>
                 </div>
@@ -123,8 +123,8 @@
                                 </td>
                                 <td>
                                     <ul class="actions">
-                                        <li><a href="javascript:;" onclick="modifyuser('{{$v['uid']}}')">禁用</a></li>
-                                        <li class="last"><a href="javascript:;" onclick="deletepermission({{$v['uid']}})">删除</a></li>
+                                        <li><a href="javascript:;" onclick="modifyuser('{{$v['uid']}}','{{$v['status']}}')">{{$v['status']==1?'禁用':'启用'}}</a></li>
+                                        <li class="last"><a href="javascript:;" onclick="deleteuser({{$v['uid']}})">删除</a></li>
                                     </ul>
                                 </td>
                             </tr>
@@ -137,53 +137,43 @@
             @include('layout.paginat')
 
 
-            <!-- 添加权限 -->
-            <div id="add-permission" style="display: none;">
+            <!-- 添加用户 -->
+            <div id="add-user" style="display: none;">
                 <div class="row-fluid form-wrapper" style="margin: 5%;width:95%;">
                     <!-- left column -->
                     <div class="span8 column">
                         <form >
                             <div class="field-box">
-                                <label>名称:</label>
-                                <input class="span8" type="text" id="pname"/>
+                                <label>账户:</label>
+                                <input class="span8" type="text" id="account" onblur="checkUser()"/>
+
                             </div>
                             <div class="field-box">
-                                <label>图标:</label>
-                                <i class="" id="iadd"></i>
-                                <a class="choseicon" key="add" style="cursor: pointer;text-decoration: none;">选择图标</a>
-                                <input type="hidden" class="classname" id="classadd">
+                                <label>昵称:</label>
+                                <input type="text" class="span8" id="nickname">
                             </div>
                             <div class="field-box">
-                                <label>路由:</label>
-                                <input class="span8" type="text" id="proute"/>
+                                <label>密码:</label>
+                                <input type="password" class="span8 password" id="password">
                             </div>
                             <div class="field-box">
-                                <label>描述:</label>
-                                <input class="span8" type="text" id="pdescri"/>
-                            </div>
-                            <div class="field-box">
-                                <label>父级目录:</label>
+                                <label>角色:</label>
                                 <div class="ui-select">
-                                    <select class="fid " id="pfid">
-                                        <option value="0" selected/>无
-                                            @foreach($data['role'] as $key => $val)
-                                                <option value="{{$val['id']}}" />{{$val['display_name']}}
-                                            @endforeach
+                                    <select class="form-search role" id="role">
+                                        @foreach($data['role'] as $v)
+                                            <option value="{{$v['id']}}"/>{{$v['name']}}
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
                             <div class="field-box">
-                                <label>类型:</label>
+                                <label>状态:</label>
                                 <div class="ui-select">
-                                    <select class="type " id="type">
-                                        <option value="1" selected/>菜单
-                                        <option value="2" />功能
+                                    <select class="form-search status" id="status">
+                                        <option value="1"/>启用
+                                        <option value="2"/>禁用
                                     </select>
                                 </div>
-                            </div>
-                            <div class="field-box">
-                                <label>序号（越小越靠前）:</label>
-                                <input class="span8" type="text" id="porder"/>
                             </div>
                             <a class="btn-flat success btn-save">保存</a>
                         </form>
@@ -201,54 +191,43 @@
 
 
 </body>
-<style>
-    .icons-wrapper{
-        cursor: pointer;
-    }
-    .icons-wrapper li:hover{
-        color: #0a1af5;
-    }
-</style>
 <script>
     $(function () {
-        var content = $("#add-permission").html();
+        var content = $("#add-user").html();
         $(".clear").click(function () {
-            $(".searchkey").val("");
-            $(".searchvalue").val("");
-        });
-        
-        $(".choseicon").click(function () {
-           showicon($(this));
+            $(".form-search ").val("");
         });
         
         $(".btn-add").click(function () {
-            $("#add-permission").remove();
+            $("#add-user").remove();
             layer.open({
                 type: 1,
-                title: '添加权限',
+                title: '添加用户',
                 skin: 'layui-layer-rim', //加上边框
                 area: ['800px', '600px'], //宽高
                 content: content
             });
-            $(".choseicon").click(function () {
-                showicon($(this));
-            });
             $(".btn-save").click(function () {
-                var pname = $("#pname").val();
-                var picon = $("#classadd").val();
-                var proute = $("#proute").val();
-                var pdescri = $("#pdescri").val();
-                var pfid = $("#pfid").val();
-                var porder = $("#porder").val();
-                var type = $("#type").val();
-                if(!pname){
-                    layer.alert('请输入名称！');
+                var account = $("#account").val();
+                var nickname = $("#nickname").val();
+                var password = $("#password").val();
+                var role = $("#role").val();
+                var status = $("#status").val();
+                if(!account){
+                    layer.alert('请输入账户！');
+                    return false;
+                }
+                if(!password){
+                    layer.alert('请输入密码！');
+                    return false;
+                }
+                if($(".icon-remove-sign").length>0){
                     return false;
                 }
                 $.ajax({
-                    url:'/permission/add',
+                    url:'/user/add',
                     type:'POST',
-                    data:'pname='+pname+'&picon='+picon+'&proute='+proute+'&pdescri='+pdescri+'&type='+type+'&pfid='+pfid+'&porder='+porder+'&_token={{csrf_token()}}',
+                    data:'account='+account+'&nickname='+nickname+'&password='+password+'&role='+role+'&status='+status+'&_token={{csrf_token()}}',
                     success:function (data) {
                         if(data.code==200){
                             layer.alert('添加成功！');
@@ -262,54 +241,66 @@
         });
 
     });
+    function checkUser() {
+        var account = $("#account").val();
+        if(!account){
+            $("#account").parent("div").removeClass("success").addClass("error")
+            $("#account").parent("div").append("<span class='alert-msg' id='showmsg'><i class='icon-remove-sign'></i> 账户不能为空</span>");
+            $("#account").focus();
+            return false;
+        }
+        $.ajax({
+            url:'/user/check',
+            type:'POST',
+            data:'account='+account+'&_token={{csrf_token()}}',
+            success:function (data) {
+                if(data.code!=200){
+                    $("#showmsg").remove();
+                    $("#account").parent("div").removeClass("success").addClass("error")
+                    $("#account").parent("div").append("<span class='alert-msg' id='showmsg'><i class='icon-remove-sign'></i> "+data.msg+"</span>");
+                    $("#account").select();
+                }else{
+                    $("#showmsg").remove();
+                    $("#account").parent("div").removeClass("error").addClass("success")
+                    $("#account").parent("div").append("<span class='alert-msg' id='showmsg'><i class='icon-ok-sign'></i> 用户名可以使用</span>");
+                }
+            }
+        })
+    }
+    function redirect() {
+        var url="?account="+$(".account").val()+"&nickname="+$(".nickname").val()+"&role="+$(".role").val()+"&status="+$(".status").val()+"&perpage={{$data['per_page']}}";
+        location.href=url;
+    }
     function checkEnter(event){
         if(event.keyCode==13){
-            var url="?searchkey="+$(".searchkey").val()+"&searchvalue="+$(".searchvalue").val()+"&perpage={{$data['per_page']}}";
-            location.href=url;
+            redirect();
         }
     }
-    function modifypermission(id,obj) {
-        if(obj.html()=='修改'){
-            $(".tbl_tr_"+id).find("label").hide();
-            $(".tbl_tr_"+id).find(".modifyform").removeClass('hide').show();
-            obj.html('保存')
-        }else{
-            var pname = $(".tbl_tr_"+id).find(".display_name").val();
-            var picon = $(".tbl_tr_"+id).find(".classname").val();
-            var proute = $(".tbl_tr_"+id).find(".name").val();
-            var pdescri = $(".tbl_tr_"+id).find(".pdescription").val();
-            var pfid = $(".tbl_tr_"+id).find(".fid").val();
-            var porder = $(".tbl_tr_"+id).find(".porder").val();
-            var type = $(".tbl_tr_"+id).find(".type").val();;
-            if(!pname){
-                layer.alert('请输入名称！');
-                return false;
-            }
-            if(!id){
-                layer.alert('修改失败，请刷新页面后再试！');
-                return false;
-            }
-            $.ajax({
-                url:'/permission/add',
-                type:'POST',
-                data:'id='+id+'&pname='+pname+'&picon='+picon+'&proute='+proute+'&pdescri='+pdescri+'&type='+type+'&pfid='+pfid+'&porder='+porder+'&_token={{csrf_token()}}',
-                success:function (data) {
-                    if(data.code==200){
-                        layer.alert('修改成功！');
-                        location.reload();
-                    }else{
-                        layer.alert(data.msg,2000);
-                    }
-                }
-            });
+    function modifyuser(uid,status) {
+        if(!uid||!status){
+            layer.alert('修改失败，请刷新页面后再试！');
+            return false;
         }
+        $.ajax({
+            url:'/user/forbid',
+            type:'POST',
+            data:'uid='+uid+'&status='+status+'&_token={{csrf_token()}}',
+            success:function (data) {
+                if(data.code==200){
+                    layer.alert('修改成功！');
+                    location.reload();
+                }else{
+                    layer.alert(data.msg,2000);
+                }
+            }
+        });
 
     }
-    function deletepermission(id) {
-        if(id){
+    function deleteuser(uid) {
+        if(uid){
             $.ajax({
-                url:'/permission/del',
-                data:'id='+id+'&_token={{csrf_token()}}',
+                url:'/user/del',
+                data:'uid='+uid+'&_token={{csrf_token()}}',
                 type:'post',
                 success:function (data) {
                if(data.code==200){
