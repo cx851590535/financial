@@ -84,10 +84,10 @@ class PermissionController extends Controller
             return ResponseHelper::error('请输入权限名称(路由)！');
         }
         $permission = Permission::where('name',$proute)->count();
-        if($permission>0){
-            return ResponseHelper::error('权限名称(路由)不能重复！');
-        }
         if(empty($id)){
+            if($permission>0){
+                return ResponseHelper::error('权限名称(路由)不能重复！');
+            }
             $permission = new Permission();
         }else{
             $permission = Permission::find($id);

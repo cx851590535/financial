@@ -98,7 +98,7 @@
                                     <label>
                                         {{$v['name']}}
                                     </label>
-                                    <input type="text" class="modifyform name hide" value="{{$v['name']}}"/>
+                                    <input type="text" class="modifyform proute hide" value="{{$v['name']}}"/>
                                 </td>
                                 <td class="description">
                                     <label>
@@ -577,7 +577,7 @@
         }else{
             var pname = $(".tbl_tr_"+id).find(".display_name").val();
             var picon = $(".tbl_tr_"+id).find(".classname").val();
-            var proute = $(".tbl_tr_"+id).find(".name").val();
+            var proute = $(".tbl_tr_"+id).find(".proute").val();
             var pdescri = $(".tbl_tr_"+id).find(".pdescription").val();
             var pfid = $(".tbl_tr_"+id).find(".fid").val();
             var porder = $(".tbl_tr_"+id).find(".porder").val();

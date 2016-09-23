@@ -38,12 +38,16 @@ Route::group(['middleware'=>'login'],function (){
         Route::post('/permission/del','PermissionController@delete');//删除权限
         Route::post('/permission/add','PermissionController@add');//添加权限
         Route::post('/permission/modfy','PermissionController@add');//修改权限
+
+
         /* *
          * 权限分配相关
          * */
         Route::get('/permission/role/show','PermissionController@roleshow');//权限分配页面
         Route::post('/permission/role/set','PermissionController@roleset');//权限分配功能
         Route::post('/permission/role/get','PermissionController@getPermissionByRole');//根据角色获取权限
+
+
         /* *
          * 用户相关
          * */
@@ -52,6 +56,8 @@ Route::group(['middleware'=>'login'],function (){
         Route::post('/user/forbid','UserController@forbid');//禁用
         Route::post('/user/add','UserController@add');//添加用户
         Route::post('/user/check','UserController@isused');//判断用户是否存在
+
+
         /* *
          * 角色相关
          * */
@@ -59,5 +65,10 @@ Route::group(['middleware'=>'login'],function (){
         Route::post('/role/add','RoleController@add');//角色添加
         Route::post('/role/del','RoleController@del');//角色删除
 
+
+        /* *
+         * 商品相关
+         * */
+        Route::get('/product/list','ProductController@getList');//商品列表
     });
 });
