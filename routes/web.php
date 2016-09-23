@@ -56,6 +56,8 @@ Route::group(['middleware'=>'login'],function (){
          * 角色相关
          * */
         Route::get('/role/index','RoleController@index');//角色列表
+        Route::post('/role/add','RoleController@add');//角色添加
+        Route::post('/role/del','RoleController@del');//角色删除
 
     });
 });
