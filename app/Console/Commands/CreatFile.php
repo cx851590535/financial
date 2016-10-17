@@ -23,7 +23,7 @@ class CreatFile extends Command
      */
     protected $description = 'Create a new file class';
 
-    protected $type = 'Service';
+    protected $type = 'Business';
 
     private $className = '';
     private $extendName = '';
@@ -143,7 +143,7 @@ class CreatFile extends Command
         $stubs = $this->files->get(app_path('Stub/class.stub'));
         /*$stubs = [
             'Eloquent'  => $this->files->get(resource_path('stubs/Repository').DIRECTORY_SEPARATOR.'Eloquent'.DIRECTORY_SEPARATOR.'repository.stub'),
-            'Service' => $this->files->get(resource_path('stubs/Repository').DIRECTORY_SEPARATOR.'repository_service.stub'),
+            'Business' => $this->files->get(resource_path('stubs/Repository').DIRECTORY_SEPARATOR.'repository_service.stub'),
         ];*/
         return $stubs;
     }
@@ -185,7 +185,7 @@ class CreatFile extends Command
             case 'Eloquent':
                 $path = $this->getDirectory().DIRECTORY_SEPARATOR.$this->getRepositoryName().'.php';
                 break;
-            case 'Service':
+            case 'Business':
                 $path = $this->getServiceDirectory().DIRECTORY_SEPARATOR.$this->getServiceName().'.php';
                 break;
         }
@@ -210,7 +210,7 @@ class CreatFile extends Command
 
     private function getServiceName()
     {
-        return $this->getRepositoryName().'Service';
+        return $this->getRepositoryName().'Business';
     }*/
 
     /**

@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Helper\ArrayHelper;
 use App\Helper\ResponseHelper;
-use App\Service\PermissionService;
-use App\Service\UserService;
+use App\Business\PermissionBusiness;
+use App\Business\UserBusiness;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -21,7 +21,7 @@ class LoginController extends Controller
             return ResponseHelper::error('用户名或密码不能为空！');
         }
         $where = array('account'=>$username,'password'=>md5($password));
-        $users = UserService::getUserInfo($where);
+        $users = UserBusiness::getUserInfo($where);
         if(count($users)<1){
             return ResponseHelper::error('用户名或密码错误！');
         }
@@ -30,7 +30,7 @@ class LoginController extends Controller
             return ResponseHelper::error('您的账户已被禁用！');
         }
         $roleid = $user['roleid'];
-        $permissions = PermissionService::getPermissionByRoleid($roleid);
+        $permissions = PermissionBusiness::getPermissionByRoleid($roleid);
         $dealpermission = ArrayHelper::dealPermission($permissions);
         $permission = $dealpermission[0];
         $permissionname = $dealpermission[1];

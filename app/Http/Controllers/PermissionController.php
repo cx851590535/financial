@@ -7,7 +7,7 @@ use App\Helper\ResponseHelper;
 use App\Model\Permission;
 use App\Model\PermissionRole;
 use App\Model\Role;
-use App\Service\PermissionService;
+use App\Business\PermissionBusiness;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
@@ -21,7 +21,7 @@ class PermissionController extends Controller
     public function refresh(Request $request){
         $user = session('user');
         $roleid = $user['roleid'];
-        $permissions = PermissionService::getPermissionByRoleid($roleid);
+        $permissions = PermissionBusiness::getPermissionByRoleid($roleid);
         $dealpermission = ArrayHelper::dealPermission($permissions);
         $permission = $dealpermission[0];
         $permissionname = $dealpermission[1];
@@ -156,7 +156,7 @@ class PermissionController extends Controller
         if(empty($role)){
             return ResponseHelper::error('请选择一个角色！');
         }else{
-            $permissions = PermissionService::getPermissionByRoleid($role,'id');
+            $permissions = PermissionBusiness::getPermissionByRoleid($role,'id');
             /*$data = array();
             foreach ($permissions as $k => $v){
                 $data[] = $v['permission_id'];

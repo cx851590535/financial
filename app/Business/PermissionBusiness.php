@@ -6,14 +6,14 @@
  * Time: 16:40:31
  */
 
-namespace App\Service;
+namespace App\Business;
 
 
 use App\Helper\ArrayHelper;
 use App\Model\Permission;
 use App\Model\PermissionRole;
 
-class PermissionService extends Service
+class PermissionBusiness extends Business
 {
     /*
      * 根据角色编号获取权限

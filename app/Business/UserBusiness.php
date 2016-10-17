@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Service;
+namespace App\Business;
 use App\Model\User;
 
-class UserService extends Service
+class UserBusiness extends Business
 {
     public static function getUserInfo($where,$filed=[]){
         $users = User::where('uid','>','0');
