@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Helper;
-class ArrayHelper extends Helper
+class ArrayHelper
 {
     /*
      * 二维数组转一位数组 $key 为保留的键

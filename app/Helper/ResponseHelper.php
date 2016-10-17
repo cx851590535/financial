@@ -9,7 +9,7 @@
 namespace App\Helper;
 
 
-class ResponseHelper extends Helper
+class ResponseHelper
 {
     public static function success($data=[],$url=''){
         $result = array('code'=>200,'data'=>$data,'url'=>$url);

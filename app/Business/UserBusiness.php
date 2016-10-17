@@ -3,7 +3,7 @@
 namespace App\Business;
 use App\Model\User;
 
-class UserBusiness extends Business
+class UserBusiness
 {
     public static function getUserInfo($where,$filed=[]){
         $users = User::where('uid','>','0');
