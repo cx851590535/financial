@@ -13,7 +13,7 @@ use App\Helper\ArrayHelper;
 use App\Model\Permission;
 use App\Model\PermissionRole;
 
-class PermissionBusiness extends Business
+class PermissionBusiness
 {
     /*
      * 根据角色编号获取权限
