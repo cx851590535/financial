@@ -64,7 +64,7 @@
             <span class="icon-bar"></span>
         </button>
 
-        <a class="brand" href="/home/index"><img src="/img/logo.png" /></a>
+        <a class="brand" href="/home/index"><img src="/img/logo.png" />响应式后台系统</a>
 
         <ul class="nav pull-right">
             <li class="hidden-phone">
