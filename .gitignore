@@ -8,3 +8,5 @@ Homestead.yaml
 /composer
 composer
 composer.lock
+/vendor1/
+*.rar
