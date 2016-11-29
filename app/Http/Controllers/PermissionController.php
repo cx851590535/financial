@@ -126,6 +126,8 @@ class PermissionController extends Controller
         return view('permission.roleshow')->with('data',$data);
     }
     public function roleset(Request $request){
+	    parse_str(file_get_contents('php://input'), $data);
+	    dd($data);
         $role = $request -> input('role','');
         $permissions = $request -> input('permissions','');
         if(empty($role)){

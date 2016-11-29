@@ -27,7 +27,7 @@ class TestController extends Controller
             "key" => $appkey,//应用APPKEY(应用详细页查询)
             "sign" => $sign,//校验值，md5(&lt;b&gt;OpenID&lt;/b&gt;+key+cardid+cardnum+orderid+game_userid+game_area+game_srv)
         );
-
+		dump($params);
 
         $recharge = new recharge($appkey,$openid);
         $paramstring = http_build_query($params);

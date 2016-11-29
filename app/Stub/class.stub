@@ -9,7 +9,7 @@
 namespace $DummyNamespace;
 
 
-class $DummyClass extends $DummyExtends
+class $DummyClass $DummyExtends
 {
 
 }

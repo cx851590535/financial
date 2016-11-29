@@ -14,7 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //
-        \App\Console\Commands\CreatFile::class
+        \App\Console\Commands\CreateFile::class
     ];
 
     /**

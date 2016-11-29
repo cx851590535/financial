@@ -7,14 +7,14 @@ use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Composer;
 
-class CreatFile extends Command
+class CreateFile extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'make:file {repository} {--model=}';
+    protected $signature = 'make:file {repository} {--extends=}';
 
     /**
      * The console command description.
@@ -26,6 +26,7 @@ class CreatFile extends Command
     protected $type = 'Business';
 
     private $className = '';
+	private $extend = 'yes';
     private $extendName = '';
     private $nameSpace = '';
 
@@ -52,22 +53,22 @@ class CreatFile extends Command
 
         //获取repository和model两个参数值
         $argument = $this->argument('repository');
-        $option   = $this->option('model');
+        $this ->extend   = $this->option('extends');
         //自动生成RepositoryService和Repository文件
-        $this->writeRepositoryAndService($argument, $option);
+        $this->writeRepositoryAndService($argument);
         //重新生成autoload.php文件
         $this->composer->dumpAutoloads();
     }
 
-    private function writeRepositoryAndService($repository, $model)
+    private function writeRepositoryAndService($repository)
     {
-        if($this->createRepository($repository, $model)){
+        if($this->createRepository($repository)){
             //若生成成功,则输出信息
             $this->info('Success to make a '.ucfirst($repository).' Repository and a '.ucfirst($repository).'Class');
         }
     }
 
-    private function createRepository($repository, $model)
+    private function createRepository($repository)
     {
         // getter/setter 赋予成员变量值
         //$this->setRepository($repository);
@@ -152,7 +153,10 @@ class CreatFile extends Command
     {
         $namespace                    = $this->nameSpace;
         $className                    = $this->className;
-        $extendName                   = $this->extendName;
+	    $extendName                    = '';
+	    if($this->extend == 'yes'){
+		    $extendName                   = 'extends '.$this->extendName;
+	    }
 
         $templateVar = [
             'DummyNamespace'           => $namespace,
